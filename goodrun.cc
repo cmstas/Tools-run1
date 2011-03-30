@@ -1,10 +1,7 @@
-// $Id: goodrun.cc,v 1.8 2010/08/14 20:07:26 jmuelmen Exp $
+// $Id: goodrun.cc,v 1.10 2011/03/30 22:20:27 warren Exp $
 
 // CINT is allowed to see this, but nothing else:
-bool goodrun (unsigned int run, unsigned int lumi_block);
-bool goodrun_json (unsigned int run, unsigned int lumi_block);
-void set_goodrun_file (const char* filename);
-void set_goodrun_file_json (const char* filename);
+#include "goodrun.h"
 
 #ifndef __CINT__
 
@@ -143,7 +140,7 @@ static int load_runs (const char *fname, enum file_type type)
 	       // printf("Read a line from the good run list: %s\n", buf);
 	       unsigned int run;
 	       char *pbuf = buf;
-	       int s = sscanf(pbuf, " %u%n", &run, &n);
+		   s = sscanf(pbuf, " %u%n", &run, &n);
 	       if (s != 1) {
 		    fprintf(stderr, "Expected a run number (unsigned int)"
 			    " in the first position of line %d: %s\n", line, buf);
@@ -263,4 +260,27 @@ void set_goodrun_file_json (const char* filename)
      good_runs_loaded_ = true;
 }
 
+int min_run_min_lumi ()
+{
+     if (not good_runs_loaded_)
+      return -1;
+     set_t::const_iterator first = good_runs_.begin();
+     if (first != good_runs_.end())
+      return first->lumi_min;
+     return -1;
+}
+
+int max_run_max_lumi ()
+{
+     if (not good_runs_loaded_)
+      return -1;
+     set_t::const_iterator last = good_runs_.end();
+     if (last != good_runs_.begin()) {
+      last--;
+      return last->lumi_max;
+     }
+     return -1;
+}
+
 #endif // __CUNT__
+
