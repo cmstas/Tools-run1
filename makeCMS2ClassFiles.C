@@ -182,6 +182,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
         TString branchclass(branch->GetClassName());
         if(!branchname.BeginsWith("int") && 
            !branchname.BeginsWith("uint") && 
+           !branchname.BeginsWith("uchar") && 
            !branchname.BeginsWith("bool") && 
            !branchname.BeginsWith("float") &&
            !branchname.BeginsWith("double") &&
@@ -194,6 +195,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
            !branchclass.Contains("LorentzVector") &&
            !branchclass.Contains("int") &&   
            !branchclass.Contains("uint") &&  
+           !branchclass.Contains("char") &&  
            !branchclass.Contains("bool") &&  
            !branchclass.Contains("float") && 
            !branchclass.Contains("double") &&
@@ -902,6 +904,8 @@ void makeBranchFile(std::string branchNamesFile, std::string treeName) {
                 prefix = "ints";
             if(varType.BeginsWith("std::vector<unsigned int>") ) 
                 prefix = "uints";
+            if(varType.BeginsWith("std::vector<unsigned char>") ) 
+                prefix = "uchar";
             if(varType.BeginsWith("ROOT::Math::LorentzVector<") )
                 prefix = "floatROOTMathPxPyPzE4DROOTMathLorentzVector";
             if(varType.BeginsWith("std::vector<ROOT::Math::LorentzVector<") )
